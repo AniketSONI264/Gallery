@@ -45,11 +45,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     default: 'Bebooooo 💝',
-    template: '%s · Bebooooo 💝',
+    template: '%s · Bebooooo 💝😍',
   },
   description: 'A quiet journey through love, time, and memory.',
   icons: {
-    icon: '/favicon-heart.svg',
+    icon: '/newIcon.svg',
     shortcut: '/favicon-heart.svg',
     apple: '/favicon-heart.svg',
   },
