@@ -107,17 +107,28 @@ export async function fetchMusic() {
   return res.json();
 }
 
-export async function updateMusic(data: {
+type Track = {
   url: string;
+  title: string;
   enabled: boolean;
+};
+
+export async function updateMusic(data: {
+  tracks: Track[];
+  mode: 'order' | 'shuffle';
 }) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/music`,
     {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     }
   );
+
+  if (!res.ok) {
+    throw new Error('Failed to update music');
+  }
+
   return res.json();
 }
