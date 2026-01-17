@@ -1,0 +1,13 @@
+1. POST /api/images/upload
+Body → form-data (IMPORTANT)
+Key	Type	Example Value
+image	File	(select any image file)
+caption	Text	Our first coffee together
+takenAt	Text	2023-02-14
+isSurprise	Text	false
+
+2. GET /api/images/gallery
+
+3. GET /api/images/surprise
+
+4. GET /api/images/timeline
