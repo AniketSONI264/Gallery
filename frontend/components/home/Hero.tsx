@@ -295,6 +295,7 @@ export default function HeroSection() {
             alt="Hero background"
             fill
             priority
+            unoptimized
             className="object-cover object-center"
           />
         </motion.div>
