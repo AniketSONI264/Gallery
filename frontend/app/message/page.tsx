@@ -459,7 +459,7 @@ export default function FinalMessagePage() {
         className="absolute inset-0"
       >
         <Image
-          src="/4.png"
+          src="/hero/4.png"
           alt="Background"
           fill
           priority
