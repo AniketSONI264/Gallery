@@ -2,13 +2,13 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { isAuthenticated } from '@/lib/auth';
+import { getToken } from '@/lib/auth';
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (!getToken()) {
       router.replace('/admin/login');
     }
   }, [router]);

@@ -1,7 +1,36 @@
+import { getToken } from '@/lib/auth';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 
 console.log('API_BASE_URL =', process.env.NEXT_PUBLIC_API_URL);
+
+export async function uploadImage(formData: FormData) {
+  const token = getToken();
+
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/images`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`Upload failed: ${res.status}`);
+  }
+
+  return res.json();
+}
+
+
 
 /* -------------------- ADMIN -------------------- */
 // export async function adminLogin(password: string) {
@@ -33,33 +62,86 @@ export async function adminLogin(password: string) {
 
 
 /* -------------------- IMAGES -------------------- */
-export async function fetchImages(section?: string, surprise?: boolean) {
+// export async function fetchImages(section?: string, surprise?: boolean) {
+//   const params = new URLSearchParams();
+
+//   if (section) params.append('section', section);
+//   if (surprise !== undefined)
+//     params.append('surprise', String(surprise));
+
+//   const res = await fetch(`${API_BASE_URL}/images?${params.toString()}`);
+
+//   if (!res.ok) throw new Error('Failed to fetch images');
+//   return res.json();
+// }
+export async function fetchImages(
+  section?: string,
+  surprise?: boolean
+) {
   const params = new URLSearchParams();
 
   if (section) params.append('section', section);
-  if (surprise !== undefined)
+  if (surprise !== undefined) {
     params.append('surprise', String(surprise));
+  }
 
-  const res = await fetch(`${API_BASE_URL}/images?${params.toString()}`);
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/images?${params.toString()}`,
+      { cache: 'no-store' }
+    );
 
-  if (!res.ok) throw new Error('Failed to fetch images');
-  return res.json();
+    if (!res.ok) return [];
+
+    return await res.json();
+  } catch (err) {
+    console.error('fetchImages failed:', err);
+    return [];
+  }
 }
 
-export async function uploadImage(formData: FormData) {
-  const token = localStorage.getItem('admin_token');
+// export async function uploadImage(formData: FormData) {
+//   const token = localStorage.getItem('admin_token');
 
-  const res = await fetch(`${API_BASE_URL}/images`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
+//   const res = await fetch(`${API_BASE_URL}/images`, {
+//     method: 'POST',
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: formData,
+//   });
 
-  if (!res.ok) throw new Error('Upload failed');
-  return res.json();
-}
+//   if (!res.ok) throw new Error('Upload failed');
+//   return res.json();
+// }
+// export async function uploadImage(formData: FormData) {
+//   const token = localStorage.getItem('token');
+
+//   if (!token) {
+//     throw new Error('Not authenticated');
+//   }
+
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_URL}/images`,
+//     {
+//       method: 'POST',
+//       headers: {
+//         Authorization: token, // ⬅️ IMPORTANT: NO "Bearer"
+//       },
+//       body: formData,
+//     }
+//   );
+
+//   const text = await res.text();
+
+//   if (!res.ok) {
+//     console.error('UPLOAD FAILED:', res.status, text);
+//     throw new Error(`Upload failed: ${res.status}`);
+//   }
+
+//   return JSON.parse(text);
+// }
+
 
 export async function deleteImage(id: string) {
   const token = localStorage.getItem('admin_token');
